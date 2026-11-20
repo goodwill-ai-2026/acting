@@ -88,6 +88,11 @@ textarea { min-height:68px; }
 .toast { position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--navy); color:#fff; padding:10px 16px; border-radius:99px; font-size:14px; font-weight:700; opacity:0; transition:.25s; pointer-events:none; z-index:9; max-width:90vw; text-align:center; }
 .toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
 .miss { background:#FFF6EE; border:1px solid #F4C9A8; color:var(--warn); border-radius:12px; padding:10px 12px; font-size:14px; margin:0 0 12px; }
+.inapp { background:#FFF4D6; border-bottom:1px solid #F1D48A; }
+.inapp .in { max-width:640px; margin:0 auto; padding:12px 16px; font-size:14.5px; color:#5A4300; }
+.inapp b { color:#3D2E00; }
+.inapp .btn { display:block; width:100%; margin-top:8px; background:#FEE500; color:#3C1E1E; }
+.saved { font-size:13px; color:var(--ok); font-weight:700; margin:0 0 12px; }
 .privacy { font-size:12.5px; color:var(--sub); text-align:center; margin:18px 0 0; }
 .reset { background:none; border:0; color:var(--sub); text-decoration:underline; font-size:13px; cursor:pointer; padding:6px; }
 @media (min-width:600px) { header h1 { font-size:26px; } }
@@ -99,6 +104,12 @@ textarea { min-height:68px; }
   <h1>우리 매장 홍보 기획 한 장</h1>
   <p>일곱 가지 질문에 답하면, AI에 붙여 넣을 요청문이 만들어집니다. AI가 모자란 부분은 먼저 물어봐요.</p>
 </div></header>
+<div class="inapp" id="inapp" hidden><div class="in">
+  <b>카카오톡 안에서 열렸어요.</b> 이대로는 AI 앱에 다녀오기가 불편하고, AI 로그인이 막힐 수 있어요.
+  <b>휴대폰 기본 브라우저(크롬·삼성 인터넷·사파리)</b>로 열어 주세요.
+  <button type="button" class="btn" id="openOut">다른 브라우저로 열기</button>
+  <span id="openOutHelp" hidden>버튼이 안 되면 화면 오른쪽 위(또는 아래) <b>⋮ / 공유 버튼 → ‘다른 브라우저로 열기’</b>를 눌러 주세요.</span>
+</div></div>
 
 <nav class="steps" aria-label="실습 단계"><div class="in">
   <button type="button" data-go="1" class="on"><b>1단계</b>기획 한 장</button>
@@ -221,6 +232,7 @@ textarea { min-height:68px; }
 
 <!-- ===== STEP 2 ===== -->
 <section class="pane" id="p2">
+  <p class="saved">✓ 적은 내용은 이 휴대폰에 자동으로 저장돼요. 뒤로 가거나 창을 닫았다가 다시 열어도 그대로예요.</p>
   <div class="miss" id="missing" hidden></div>
   <ol class="do">
     <li><b>요청문 복사</b>를 누릅니다.
@@ -233,7 +245,8 @@ textarea { min-height:68px; }
       </div></li>
     <li>AI가 <b>질문</b>하면 짧게 답합니다. 모르면 “모르겠어”라고 해도 괜찮아요.</li>
     <li>문구가 두 개 나오면, 마음에 드는 상자 오른쪽 위의 <b>복사</b>를 누릅니다.</li>
-    <li>여기로 돌아와 아래 <b>다음</b>을 눌러 붙여 넣습니다.</li>
+    <li>여기로 돌아와 아래 <b>다음</b>을 눌러 붙여 넣습니다.<br>
+      <span class="tip">돌아오는 법: 휴대폰의 <b>최근 앱</b> 버튼(화면 아래 ‖‖‖ 또는 □, 아이폰은 아래에서 위로 쓸어 올리기)을 누르고 이 브라우저 창을 고르세요.</span></li>
   </ol>
   <details class="demo"><summary>요청문 미리 보기</summary><div class="out"><pre id="prompt"></pre></div></details>
   <p class="tip">AI 접속이 어려워도 괜찮습니다. 다음 단계에서 기획 한 장과 요청문만 저장해 두면 나중에 다시 쓸 수 있어요.</p>
@@ -477,6 +490,18 @@ textarea { min-height:68px; }
   $$(".steps button").forEach(function (b) { b.onclick = function () { go(+b.dataset.go); }; });
   $("#next").onclick = function () { go(S.step + 1); };
   $("#prev").onclick = function () { go(S.step - 1); };
+
+  // ---------- in-app browser (카카오톡 등) ----------
+  var ua = navigator.userAgent || "";
+  var kakao = /KAKAOTALK/i.test(ua);
+  if (kakao || /NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua)) {
+    $("#inapp").hidden = false;
+    $("#openOut").onclick = function () {
+      if (kakao) location.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(location.href);
+      else copy(location.href, "주소를 복사했어요. 크롬이나 사파리 주소창에 붙여 넣으세요");
+      $("#openOutHelp").hidden = false;
+    };
+  }
 
   load(); paint(); go(S.step || 1);
   window.__plan = { prompt: prompt, bundle: bundle, S: S };   // for testing in the browser console
