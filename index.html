@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>선택받는 굿윌스토어 · 홍보 기획 실습</title>
+<meta name="description" content="일곱 가지 질문에 답하면 AI 요청문을 만들어 주는 실습 페이지. 입력한 내용은 이 휴대폰에만 남고 어디에도 전송되지 않습니다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root {
+  --navy:#001D67; --blue:#0045BA; --blue2:#325ADC; --lblue:#8FB3FF; --pale:#E8EEFB; --pale2:#F4F7FD;
+  --txt:#1F2430; --sub:#5B6474; --line:#D7DFEF; --ok:#00A24A; --warn:#C2570C; --bg:#F6F8FC; --card:#fff;
+}
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; background:var(--bg); color:var(--txt); font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  font-size:16px; line-height:1.55; word-break:keep-all; overflow-wrap:anywhere; }
+button, input, textarea { font:inherit; color:inherit; }
+.wrap { max-width:640px; margin:0 auto; padding:0 16px 120px; }
+header.top { background:var(--navy); color:#fff; padding:22px 16px 18px; }
+header.top .in { max-width:640px; margin:0 auto; }
+.badge { display:inline-block; font-size:12px; font-weight:700; background:var(--blue2); padding:3px 10px; border-radius:99px; }
+header h1 { font-size:22px; line-height:1.3; margin:10px 0 4px; letter-spacing:-.3px; }
+header p { margin:0; font-size:14px; color:#C9D6F5; }
+.steps { position:sticky; top:0; z-index:5; background:rgba(246,248,252,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
+.steps .in { max-width:640px; margin:0 auto; display:flex; gap:6px; padding:10px 16px; }
+.steps button { flex:1; border:0; background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:7px 4px; font-size:13px; font-weight:700; color:var(--sub); cursor:pointer; }
+.steps button b { display:block; font-size:11px; color:var(--lblue); }
+.steps button.on { background:var(--blue); border-color:var(--blue); color:#fff; } .steps button.on b { color:#D6E2FF; }
+.steps button.done { border-color:var(--blue); color:var(--blue); }
+.pane { display:none; padding-top:16px; } .pane.on { display:block; }
+.note { background:var(--pale); border-radius:14px; padding:12px 14px; font-size:14px; color:var(--navy); margin:0 0 14px; }
+.note b { color:var(--blue); }
+.demo { border:1.5px dashed var(--lblue); background:#fff; border-radius:14px; padding:10px 14px; margin:0 0 14px; }
+.demo summary { cursor:pointer; font-size:14px; font-weight:700; color:var(--blue); }
+.demo .row { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.demo p { margin:8px 0 0; font-size:12.5px; color:var(--sub); }
+.q { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px; margin:0 0 12px; }
+.q .hd { display:flex; gap:10px; align-items:flex-start; }
+.q .n { flex:none; width:30px; height:30px; border-radius:50%; background:var(--blue); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:15px; }
+.q h2 { margin:2px 0 0; font-size:17px; line-height:1.35; }
+.q h2 small { display:block; font-size:13px; font-weight:600; color:var(--blue); margin-bottom:1px; }
+.q .help { font-size:13.5px; color:var(--sub); margin:8px 0 10px; }
+.q.req h2 small:after { content:" · 꼭 적어 주세요"; color:var(--warn); }
+.q.req.pick h2 small:after { content:" · 꼭 골라 주세요"; }
+.q.opt h2 small:after { content:" · 비워 둬도 돼요"; color:var(--sub); font-weight:500; }
+.chip.etc { border-style:dashed; border-color:var(--lblue); color:var(--blue); font-weight:700; }
+.chip.etc.on { border-style:solid; background:var(--navy); border-color:var(--navy); color:#fff; }
+.etcbox { margin-top:2px; }
+ol.do { counter-reset:d; list-style:none; padding:0; margin:0 0 14px; }
+ol.do li { counter-increment:d; position:relative; background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px 14px 14px 50px; margin:0 0 10px; font-size:15.5px; }
+ol.do li:before { content:counter(d); position:absolute; left:14px; top:13px; width:26px; height:26px; border-radius:50%; background:var(--blue); color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; }
+ol.do .ai { margin:10px 0 0; }
+.chips { display:flex; flex-wrap:wrap; gap:7px; margin:0 0 10px; }
+.chip { border:1.5px solid var(--line); background:#fff; border-radius:99px; padding:7px 13px; font-size:14.5px; cursor:pointer; line-height:1.3; text-align:left; }
+.chip.on { background:var(--blue); border-color:var(--blue); color:#fff; font-weight:700; }
+.chip small { display:block; font-size:12px; opacity:.85; font-weight:500; }
+.goal .chip { flex:1 1 30%; border-radius:14px; padding:10px 12px; font-weight:700; }
+.lbl { font-size:13px; font-weight:700; color:var(--navy); margin:10px 0 6px; }
+textarea, input[type=text] { width:100%; border:1.5px solid var(--line); border-radius:12px; padding:10px 12px; background:#fff; font-size:16px; resize:vertical; }
+textarea:focus, input:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,69,186,.12); }
+textarea { min-height:68px; }
+.seg { display:flex; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; margin-top:8px; }
+.seg button { flex:1; border:0; background:#fff; padding:8px 4px; font-size:13.5px; cursor:pointer; }
+.seg button + button { border-left:1.5px solid var(--line); }
+.seg button.on { background:var(--navy); color:#fff; font-weight:700; }
+.tip { font-size:12.5px; color:var(--sub); margin-top:6px; }
+.tip.warn { color:var(--warn); }
+.bar { position:fixed; left:0; right:0; bottom:0; z-index:6; background:#fff; border-top:1px solid var(--line); padding:10px 16px calc(10px + env(safe-area-inset-bottom)); }
+.bar .in { max-width:640px; margin:0 auto; display:flex; gap:8px; }
+.btn { border:0; border-radius:14px; padding:13px 16px; font-weight:800; font-size:16px; cursor:pointer; background:var(--blue); color:#fff; flex:1; }
+.btn.ghost { background:#fff; color:var(--navy); border:1.5px solid var(--line); flex:0 0 auto; }
+.btn.navy { background:var(--navy); }
+.btn:disabled { opacity:.45; }
+.out { background:#fff; border:1px solid var(--line); border-radius:18px; padding:4px; margin:0 0 12px; }
+.out pre { margin:0; padding:14px; white-space:pre-wrap; font-family:inherit; font-size:14.5px; line-height:1.65; max-height:52vh; overflow:auto; }
+.out pre .ph { color:var(--warn); font-weight:700; }
+.acts { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 14px; }
+.acts .btn { flex:1 1 45%; padding:12px; font-size:15px; }
+.ai { display:flex; gap:8px; margin:0 0 14px; }
+.ai a { flex:1; text-align:center; text-decoration:none; border:1.5px solid var(--line); background:#fff; color:var(--navy); border-radius:12px; padding:10px 4px; font-weight:700; font-size:14px; }
+.howto { counter-reset:h; list-style:none; padding:0; margin:0 0 14px; }
+.howto li { counter-increment:h; position:relative; padding:0 0 8px 34px; font-size:14.5px; }
+.howto li:before { content:counter(h); position:absolute; left:0; top:0; width:24px; height:24px; border-radius:50%; background:var(--pale); color:var(--blue); font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+.check { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px dashed var(--line); font-size:15px; cursor:pointer; }
+.check:last-child { border-bottom:0; }
+.check input { width:20px; height:20px; margin:2px 0 0; accent-color:var(--blue); flex:none; }
+.toast { position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--navy); color:#fff; padding:10px 16px; border-radius:99px; font-size:14px; font-weight:700; opacity:0; transition:.25s; pointer-events:none; z-index:9; max-width:90vw; text-align:center; }
+.toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
+.miss { background:#FFF6EE; border:1px solid #F4C9A8; color:var(--warn); border-radius:12px; padding:10px 12px; font-size:14px; margin:0 0 12px; }
+.privacy { font-size:12.5px; color:var(--sub); text-align:center; margin:18px 0 0; }
+.reset { background:none; border:0; color:var(--sub); text-decoration:underline; font-size:13px; cursor:pointer; padding:6px; }
+@media (min-width:600px) { header h1 { font-size:26px; } }
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <span class="badge">함께하는재단 굿윌스토어 · 홍보 기획 실습</span>
+  <h1>우리 매장 홍보 기획 한 장</h1>
+  <p>일곱 가지 질문에 답하면, AI에 붙여 넣을 요청문이 만들어집니다. AI가 모자란 부분은 먼저 물어봐요.</p>
+</div></header>
+
+<nav class="steps" aria-label="실습 단계"><div class="in">
+  <button type="button" data-go="1" class="on"><b>1단계</b>기획 한 장</button>
+  <button type="button" data-go="2"><b>2단계</b>요청문 복사</button>
+  <button type="button" data-go="3"><b>3단계</b>고르고 저장</button>
+</div></nav>
+
+<main class="wrap">
+<!-- ===== STEP 1 ===== -->
+<section class="pane on" id="p1">
+  <p class="note">보기에서 <b>고르거나</b>, <b>기타</b>를 눌러 <b>직접 적으면</b> 됩니다. 둘 다 해도 괜찮아요.<br>
+    꼭 채울 칸은 <b>1·3·4번</b>뿐이고, 나머지는 비워 둬도 됩니다. 비워 두면 AI가 먼저 물어봐요.</p>
+
+  <details class="demo">
+    <summary>강사 시연용 · 가상 사례 불러오기</summary>
+    <div class="row">
+      <button type="button" class="chip" data-demo="A">A 방문을 돕기</button>
+      <button type="button" class="chip" data-demo="B">B 구매를 돕기</button>
+      <button type="button" class="chip" data-demo="C">C 재방문을 돕기</button>
+    </div>
+    <p>‘○○동 굿윌스토어’는 교육용 가상 사례입니다. 실제 지점과 관계없습니다. 불러오면 지금 입력한 내용이 바뀝니다.</p>
+  </details>
+
+  <div class="q req pick" id="q1">
+    <div class="hd"><span class="n">1</span><h2><small>목표</small>어떤 고객의 선택을 돕고 싶은가요?</h2></div>
+    <p class="help">이번 홍보 한 건에서는 하나만 골라 주세요.</p>
+    <div class="chips goal" data-single="goal">
+      <button type="button" class="chip" data-v="방문">방문을 돕기<small>‘한번 들러볼까’ 하도록</small></button>
+      <button type="button" class="chip" data-v="구매">구매를 돕기<small>매장 안에서 고르기 쉽도록</small></button>
+      <button type="button" class="chip" data-v="재방문">재방문을 돕기<small>또 들를 이유가 생기도록</small></button>
+    </div>
+  </div>
+
+  <div class="q opt" id="q2">
+    <div class="hd"><span class="n">2</span><h2><small>고객</small>누구에게 전할까요?</h2></div>
+    <p class="help">하나를 고르거나, 기타를 눌러 직접 적어 주세요.</p>
+    <div class="chips" data-single="customerPick">
+      <button type="button" class="chip" data-v="매장 근처를 지나는 동네 주민">매장 근처를 지나는 동네 주민</button>
+      <button type="button" class="chip" data-v="처음 와 보는 고객">처음 와 보는 고객</button>
+      <button type="button" class="chip" data-v="매장에 들어와 둘러보는 고객">매장에 들어와 둘러보는 고객</button>
+      <button type="button" class="chip" data-v="아이 옷을 고르는 부모">아이 옷을 고르는 부모</button>
+      <button type="button" class="chip" data-v="한 번 구매한 고객">한 번 구매한 고객</button>
+      <button type="button" class="chip" data-v="자주 오시는 단골 고객">자주 오시는 단골 고객</button>
+      <button type="button" class="chip etc" data-etc="customer">✏️ 기타 · 직접 적기</button>
+    </div>
+    <input type="text" id="customer" class="etcbox" hidden placeholder="예: 퇴근길에 매장 앞을 지나는 직장인" maxlength="80">
+  </div>
+
+  <div class="q req" id="q3">
+    <div class="hd"><span class="n">3</span><h2><small>사실·장면</small>현장에서 직접 보거나 들은 것은 무엇인가요?</h2></div>
+    <p class="help">한두 줄이면 충분해요. 홍보할 상품이 들어가면 좋습니다.</p>
+    <textarea id="fact" rows="2" maxlength="300" placeholder="예: 니트·가디건을 색상별로 다시 진열했다"></textarea>
+    <div class="lbl">이건 어떤 내용인가요? (하나 고르기)</div>
+    <div class="seg" data-seg="factKind" role="group" aria-label="사실의 종류">
+      <button type="button" data-v="직접 본 사실" class="on">직접 봤어요</button>
+      <button type="button" data-v="현장 체감">그렇게 느껴요</button>
+      <button type="button" data-v="집계 자료">숫자로 셌어요</button>
+    </div>
+  </div>
+
+  <div class="q req" id="q4">
+    <div class="hd"><span class="n">4</span><h2><small>가치(짐작)</small>이 고객에게 어떤 점이 좋을 것 같나요?</h2></div>
+    <p class="help">아직 확인 전인 생각이어도 괜찮아요. 끝을 <b>‘~일 수 있다’</b>로 적어 보세요.</p>
+    <textarea id="value" rows="2" maxlength="300" placeholder="예: 원하는 색을 빨리 찾을 수 있다는 점이 들러볼 이유가 될 수 있다"></textarea>
+    <div class="lbl">생각이 안 날 때 눌러 보세요 (안 눌러도 됩니다)</div>
+    <div class="chips" data-hint="value">
+      <button type="button" class="chip" data-v="빨리 찾을 수 있어 편할 수 있다">편리함</button>
+      <button type="button" class="chip" data-v="부담 없는 가격에 괜찮은 물건을 살 수 있을 수 있다">이득</button>
+      <button type="button" class="chip" data-v="필요한 물건을 사면서 이웃의 일자리에도 보탬이 될 수 있다">의미</button>
+      <button type="button" class="chip" data-v="올 때마다 새로 구경할 것이 있어 즐거울 수 있다">발견하는 재미</button>
+    </div>
+    <p class="tip">누르면 예시 문장이 칸에 들어갑니다. 우리 매장에 맞게 고쳐 주세요.</p>
+    <p class="tip warn" id="valueTip" hidden>‘~이다’로 단정하기보다 ‘~일 수 있다’로 적으면, AI도 짐작을 사실처럼 쓰지 않아요.</p>
+  </div>
+
+  <div class="q opt" id="q5">
+    <div class="hd"><span class="n">5</span><h2><small>근거</small>손님에게 무엇을 보여 줄까요?</h2></div>
+    <p class="help">손님이 ‘정말 그렇네’ 하고 눈으로 확인할 것이에요. 여러 개 골라도 되고, 기타에 직접 적어도 됩니다.</p>
+    <div class="chips" data-multi="evidence">
+      <button type="button" class="chip" data-v="매장·진열 사진">매장·진열 사진</button>
+      <button type="button" class="chip" data-v="상품 사진">상품 사진</button>
+      <button type="button" class="chip" data-v="진열대 안내 카드">진열대 안내 카드</button>
+      <button type="button" class="chip" data-v="허락받은 실제 고객 후기">허락받은 고객 후기</button>
+      <button type="button" class="chip" data-v="직원 추천 한마디">직원 추천 한마디</button>
+      <button type="button" class="chip etc" data-etc="evidenceText">✏️ 기타 · 직접 적기</button>
+    </div>
+    <input type="text" id="evidenceText" class="etcbox" hidden placeholder="예: 색상별 진열대 사진 1장" maxlength="120">
+  </div>
+
+  <div class="q opt" id="q6">
+    <div class="hd"><span class="n">6</span><h2><small>채널</small>어디에 붙이거나 올릴까요?</h2></div>
+    <p class="help">여러 개 골라도 되고, 기타에 직접 적어도 됩니다.</p>
+    <div class="chips" data-multi="channel">
+      <button type="button" class="chip" data-v="매장 앞 입간판">매장 앞 입간판</button>
+      <button type="button" class="chip" data-v="매장 안 안내 카드">매장 안 안내 카드</button>
+      <button type="button" class="chip" data-v="계산대 안내">계산대 안내</button>
+      <button type="button" class="chip" data-v="SNS 게시물">SNS 게시물</button>
+      <button type="button" class="chip" data-v="지역 단체 대화방">지역 단체 대화방</button>
+      <button type="button" class="chip" data-v="문자·카카오톡 소식">문자·카카오톡 소식</button>
+      <button type="button" class="chip etc" data-etc="channelText">✏️ 기타 · 직접 적기</button>
+    </div>
+    <input type="text" id="channelText" class="etcbox" hidden placeholder="예: 아파트 게시판, 손글씨 A4 한 장" maxlength="120">
+  </div>
+
+  <div class="q opt" id="q7">
+    <div class="hd"><span class="n">7</span><h2><small>반응</small>실행한 뒤 무엇을 살펴볼까요?</h2></div>
+    <p class="help">미리 정해 두면, 다음에 무엇을 바꿀지 알 수 있어요. 여러 개 골라도 되고, 기타에 직접 적어도 됩니다.</p>
+    <div class="chips" data-multi="reaction">
+      <button type="button" class="chip" data-v="관련 문의">관련 문의</button>
+      <button type="button" class="chip" data-v="코너 앞에 머무는 고객">코너 앞에 머무는 고객</button>
+      <button type="button" class="chip" data-v="해당 품목 판매 기록">해당 품목 판매 기록</button>
+      <button type="button" class="chip" data-v="고객의 언급(“보고 왔어요”)">“보고 왔어요” 하는 고객</button>
+      <button type="button" class="chip" data-v="다시 방문한 고객">다시 방문한 고객</button>
+      <button type="button" class="chip" data-v="SNS 반응">SNS 반응</button>
+      <button type="button" class="chip etc" data-etc="reactionText">✏️ 기타 · 직접 적기</button>
+    </div>
+    <input type="text" id="reactionText" class="etcbox" hidden placeholder="예: 일주일 동안 니트 문의 횟수" maxlength="120">
+  </div>
+</section>
+
+<!-- ===== STEP 2 ===== -->
+<section class="pane" id="p2">
+  <div class="miss" id="missing" hidden></div>
+  <ol class="do">
+    <li><b>요청문 복사</b>를 누릅니다.
+      <button type="button" class="btn" id="copyPrompt" style="width:100%;margin-top:8px">요청문 복사</button></li>
+    <li>평소 쓰는 AI를 열고, 입력창을 길게 눌러 <b>붙여넣기</b> → 보내기
+      <div class="ai">
+        <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+        <a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
+        <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
+      </div></li>
+    <li>AI가 <b>질문</b>하면 짧게 답합니다. 모르면 “모르겠어”라고 해도 괜찮아요.</li>
+    <li>문구가 두 개 나오면, 마음에 드는 상자 오른쪽 위의 <b>복사</b>를 누릅니다.</li>
+    <li>여기로 돌아와 아래 <b>다음</b>을 눌러 붙여 넣습니다.</li>
+  </ol>
+  <details class="demo"><summary>요청문 미리 보기</summary><div class="out"><pre id="prompt"></pre></div></details>
+  <p class="tip">AI 접속이 어려워도 괜찮습니다. 다음 단계에서 기획 한 장과 요청문만 저장해 두면 나중에 다시 쓸 수 있어요.</p>
+</section>
+
+<!-- ===== STEP 3 ===== -->
+<section class="pane" id="p3">
+  <div class="q">
+    <div class="hd"><span class="n" style="background:var(--navy)">✓</span><h2><small>고르고 고치기</small>AI가 준 문구 하나를 붙여 넣고, 우리 매장에 맞게 고쳐 주세요</h2></div>
+    <textarea id="draft" rows="5" maxlength="2000" placeholder="여기를 길게 눌러 붙여 넣기"></textarea>
+  </div>
+  <div class="q">
+    <div class="hd"><span class="n" style="background:var(--navy)">✓</span><h2><small>쓰기 전 확인</small>네 가지만 봐 주세요</h2></div>
+    <div style="margin-top:8px" id="checks">
+      <label class="check"><input type="checkbox">내가 적지 않은 정보(상태·효능 등)가 들어가지 않았나요?</label>
+      <label class="check"><input type="checkbox">짐작이 사실처럼 쓰이지 않았나요?</label>
+      <label class="check"><input type="checkbox">없는 행사·마감·인기 순위는 없나요?</label>
+      <label class="check"><input type="checkbox">우리 손님에게 어울리는 말투인가요?</label>
+    </div>
+  </div>
+  <div class="lbl">오늘 결과물 저장 (기획 한 장 · 요청문 · 문구)</div>
+  <div class="acts">
+    <button type="button" class="btn navy" id="share">나에게 보내기</button>
+    <button type="button" class="btn" id="copyAll">전체 복사</button>
+    <button type="button" class="btn ghost" id="download" style="flex:1 1 100%">텍스트 파일로 저장</button>
+  </div>
+  <p class="tip">‘나에게 보내기’를 누르면 공유 창이 열립니다. 카카오톡 ‘나와의 채팅’이나 메모 앱을 고르면 돼요. 공유 창이 안 열리면 ‘전체 복사’ 후 붙여 넣어 주세요.</p>
+  <p class="privacy">입력한 내용은 이 휴대폰 브라우저에만 남고, 어디에도 전송되지 않습니다.<br>
+    <button type="button" class="reset" id="reset">입력 내용 모두 지우기</button></p>
+</section>
+</main>
+
+<div class="bar"><div class="in">
+  <button type="button" class="btn ghost" id="prev" hidden>이전</button>
+  <button type="button" class="btn" id="next">요청문 만들기</button>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "goodwill-plan-v2";
+  var GOAL = {
+    "방문": "지나가는 고객이 ‘한번 들러볼까’ 하도록 방문을 돕기",
+    "구매": "매장에 들어온 고객이 고르기 쉽도록 구매를 돕기",
+    "재방문": "구매한 고객이 다음에 또 들를 이유가 생기도록 재방문을 돕기"
+  };
+  var LEN = {
+    "매장 앞 입간판": "입간판은 멀리서도 읽히게 한두 줄",
+    "매장 안 안내 카드": "안내 카드는 세 줄 이내",
+    "계산대 안내": "계산대 안내는 한두 줄",
+    "SNS 게시물": "SNS는 3~5줄",
+    "지역 단체 대화방": "단체 대화방은 인사 포함 3~4줄, 부담 없는 말투",
+    "문자·카카오톡 소식": "문자·카카오톡은 3줄 이내"
+  };
+  var DEMO = {
+    A: { goal: "방문", customerPick: "매장 근처를 지나는 동네 주민", fact: "○○동 굿윌스토어(가상)에서 니트·가디건을 색상별로 다시 진열했다", factKind: "직접 본 사실",
+         value: "원하는 색을 빨리 찾을 수 있다는 점이 들러볼 이유가 될 수 있다",
+         evidence: [], evidenceText: "색상별 진열대 사진 1장", channel: ["매장 앞 입간판"], channelText: "",
+         reaction: ["관련 문의", "코너 앞에 머무는 고객"], reactionText: "", etc: { evidenceText: true } },
+    B: { goal: "구매", customerPick: "매장에 들어와 둘러보는 고객", fact: "○○동 굿윌스토어(가상)에서 니트·가디건을 색상별로 다시 진열한 뒤, 니트 코너를 둘러보는 고객이 늘었다", factKind: "현장 체감",
+         value: "색으로 먼저 고르면 고르기 편할 수 있다",
+         evidence: ["진열대 안내 카드"], evidenceText: "", channel: ["매장 안 안내 카드"], channelText: "",
+         reaction: ["코너 앞에 머무는 고객", "해당 품목 판매 기록"], reactionText: "", etc: {} },
+    C: { goal: "재방문", customerPick: "한 번 구매한 고객", fact: "○○동 굿윌스토어(가상)는 새로 들어온 상품을 매주 진열대에 정리한다", factKind: "직접 본 사실",
+         value: "들를 때마다 새로 고를 것이 있다는 점이 다시 올 이유가 될 수 있다",
+         evidence: [], evidenceText: "실제로 정리한 날의 진열대 사진", channel: ["계산대 안내", "문자·카카오톡 소식"], channelText: "",
+         reaction: ["고객의 언급(“보고 왔어요”)", "다시 방문한 고객"], reactionText: "", etc: { evidenceText: true } }
+  };
+  var TEXT = ["customer", "fact", "value", "evidenceText", "channelText", "reactionText", "draft"];
+  var MULTI = ["evidence", "channel", "reaction"];
+  var ETC = ["customer", "evidenceText", "channelText", "reactionText"];
+  var S = { goal: "", customerPick: "", factKind: "직접 본 사실", step: 1, checks: [false, false, false, false], etc: {} };
+  MULTI.forEach(function (k) { S[k] = []; });
+  TEXT.forEach(function (k) { S[k] = ""; });
+
+  function $(s) { return document.querySelector(s); }
+  function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+  function store() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  function load() {
+    try { var o = JSON.parse(localStorage.getItem(KEY) || "null"); if (o) Object.keys(S).forEach(function (k) { if (k in o) S[k] = o[k]; }); } catch (e) {}
+    if (!S.etc || typeof S.etc !== "object") S.etc = {};
+  }
+  function toast(m) { var t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function () { t.classList.remove("on"); }, 2000); }
+  function clean(v) { return (v || "").replace(/\s+/g, " ").trim(); }
+  function etcText(k) { return S.etc[k] ? clean(S[k]) : ""; }   // 기타를 켠 칸의 글만 씀
+
+  // ---------- render state into the form ----------
+  function paint() {
+    $$("[data-single=goal] .chip").forEach(function (b) { b.classList.toggle("on", b.dataset.v === S.goal); });
+    $$("[data-single=customerPick] .chip:not(.etc)").forEach(function (b) { b.classList.toggle("on", b.dataset.v === S.customerPick); });
+    $$("[data-seg=factKind] button").forEach(function (b) { b.classList.toggle("on", b.dataset.v === S.factKind); });
+    MULTI.forEach(function (k) { $$("[data-multi=" + k + "] .chip:not(.etc)").forEach(function (b) { b.classList.toggle("on", S[k].indexOf(b.dataset.v) > -1); }); });
+    ETC.forEach(function (k) {
+      var on = !!S.etc[k];
+      $$("[data-etc=" + k + "]").forEach(function (b) { b.classList.toggle("on", on); });
+      document.getElementById(k).hidden = !on;
+    });
+    TEXT.forEach(function (k) { var el = document.getElementById(k); if (el && el.value !== S[k]) el.value = S[k]; });
+    $$("#checks input").forEach(function (c, i) { c.checked = !!S.checks[i]; });
+    valueTip();
+  }
+  function valueTip() {
+    var v = clean(S.value);
+    $("#valueTip").hidden = !v || /(수 있|것 같|일지|듯|아닐까|않을까|\?)/.test(v);
+  }
+
+  // ---------- inputs ----------
+  $$("[data-single=goal] .chip").forEach(function (b) { b.onclick = function () { S.goal = S.goal === b.dataset.v ? "" : b.dataset.v; paint(); store(); }; });
+  $$("[data-single=customerPick] .chip:not(.etc)").forEach(function (b) {
+    b.onclick = function () { S.customerPick = S.customerPick === b.dataset.v ? "" : b.dataset.v; paint(); store(); };
+  });
+  $$("[data-seg=factKind] button").forEach(function (b) { b.onclick = function () { S.factKind = b.dataset.v; paint(); store(); }; });
+  MULTI.forEach(function (k) {
+    $$("[data-multi=" + k + "] .chip:not(.etc)").forEach(function (b) {
+      b.onclick = function () { var i = S[k].indexOf(b.dataset.v); if (i > -1) S[k].splice(i, 1); else S[k].push(b.dataset.v); paint(); store(); };
+    });
+  });
+  $$("[data-etc]").forEach(function (b) {
+    b.onclick = function () {
+      var k = b.dataset.etc; S.etc[k] = !S.etc[k]; paint(); store();
+      if (S.etc[k]) document.getElementById(k).focus();
+    };
+  });
+  $$("[data-hint=value] .chip").forEach(function (b) {
+    b.onclick = function () {
+      if (clean(S.value) && !confirm("지금 적은 내용을 예시 문장으로 바꿀까요?")) return;
+      S.value = b.dataset.v; paint(); store(); document.getElementById("value").focus();
+    };
+  });
+  TEXT.forEach(function (k) { var el = document.getElementById(k); if (el) el.addEventListener("input", function () { S[k] = el.value; if (k === "value") valueTip(); store(); }); });
+  $$("#checks input").forEach(function (c, i) { c.onchange = function () { S.checks[i] = c.checked; store(); }; });
+  $$("[data-demo]").forEach(function (b) {
+    b.onclick = function () {
+      var d = DEMO[b.dataset.demo];
+      Object.keys(d).forEach(function (k) { S[k] = Array.isArray(d[k]) ? d[k].slice() : (typeof d[k] === "object" ? JSON.parse(JSON.stringify(d[k])) : d[k]); });
+      S.customer = ""; paint(); store(); toast("가상 사례 " + b.dataset.demo + "를 불러왔습니다");
+    };
+  });
+
+  // ---------- request text ----------
+  var EMPTY = "(비어 있음)";
+  function join(arr, extra) { var a = arr.slice(); if (extra) a.push(extra); return a.join(", "); }
+  function customerText() { return join(S.customerPick ? [S.customerPick] : [], etcText("customer")); }
+  function channelText() { return join(S.channel, etcText("channelText")); }
+  function planLines() {
+    return [
+      "· 목표: " + (S.goal ? GOAL[S.goal] : EMPTY),
+      "· 고객: " + (customerText() || EMPTY),
+      "· 현장에서 본 것: " + (clean(S.fact) ? clean(S.fact) + " (" + S.factKind + ")" : EMPTY),
+      "· 고객에게 좋을 점(내 짐작, 아직 확인 전): " + (clean(S.value) || EMPTY),
+      "· 손님에게 보여 줄 것: " + (join(S.evidence, etcText("evidenceText")) || EMPTY),
+      "· 붙이거나 올릴 곳: " + (channelText() || EMPTY),
+      "· 실행 후 살펴볼 반응: " + (join(S.reaction, etcText("reactionText")) || EMPTY)
+    ];
+  }
+  function prompt() {
+    var len = S.channel.map(function (c) { return LEN[c]; }).filter(Boolean);
+    var lenLine = len.length ? len.join(", ") : "올릴 곳에 맞게 짧게";
+    return [
+      "너는 굿윌스토어 직원의 홍보 문구 만들기를 돕는 도우미야.",
+      "아래는 내가 우리 매장에서 직접 확인한 내용이야.",
+      "",
+      "[기획 한 장]"
+    ].concat(planLines(), [
+      "",
+      "[이렇게 해 줘]",
+      "1. 먼저 문구를 쓰는 데 꼭 필요한데 위에 없거나 ‘(비어 있음)’인 내용을 나한테 질문해 줘. 한 번에 하나씩, 짧게, 최대 3개까지. 내가 답하면 다음 질문으로 넘어가. 물을 게 없으면 바로 2번으로 가.",
+      "2. 그다음 홍보 문구를 딱 두 개만 써 줘. A는 무엇이 있는지 정확히 알려 주는 말, B는 손님이 쓰는 장면을 떠올리게 하는 말. (길이: " + lenLine + ")",
+      "3. 문구는 하나씩 따로 코드 블록에 넣어서 바로 복사할 수 있게 해 줘. 코드 블록 안에는 문구만 넣고, 한 줄은 짧게 끊어 줘.",
+      "4. 각 문구 아래에 어떤 손님에게 어울리는지 한 줄만 적어 줘. 그 밖의 설명은 하지 마.",
+      "",
+      "[지킬 것]",
+      "· 내가 적지 않은 상품 정보·상태·효능, 행사·마감·품절·인기 순위는 지어내지 마. 필요하면 나한테 물어봐.",
+      "· 손님 마음을 단정하지 말고, 내 짐작은 짐작으로만 써.",
+      "· 다른 매장과 비교하지 말고, 물건의 사연을 지어내지 마.",
+      "· 동정이나 죄책감에 기대는 말은 쓰지 마.",
+      "· 매장 이름이 필요하면 [매장 이름]으로 비워 둬."
+    ]).join("\n");
+  }
+  function bundle() {
+    var d = new Date(), day = d.getFullYear() + "." + (d.getMonth() + 1) + "." + d.getDate();
+    return ["■ 우리 매장 홍보 기획 한 장 (" + day + ")"].concat(planLines(), [
+      "", "■ AI 요청문 (다음에는 [기획 한 장] 내용만 바꿔 쓰기)", prompt(),
+      "", "■ 고르고 고친 문구", clean(S.draft) ? S.draft.trim() : "(아직 없음)",
+      "", "■ 실행 기록 (나중에 채우기)", "· 게시한 날짜: ", "· 살펴본 반응: ", "· 다음에 바꿔 볼 것: "
+    ]).join("\n");
+  }
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function showPrompt() {
+    $("#prompt").innerHTML = esc(prompt()).split(esc(EMPTY)).join('<span class="ph">' + esc(EMPTY) + "</span>");
+    var miss = [];
+    if (!S.goal) miss.push("1 목표");
+    if (!clean(S.fact)) miss.push("3 사실·장면");
+    if (!clean(S.value)) miss.push("4 가치");
+    var m = $("#missing");
+    m.hidden = !miss.length;
+    m.textContent = miss.length ? "아직 비어 있는 칸: " + miss.join(", ") + ". 그대로 복사해도 AI가 먼저 물어봐요. 미리 채우려면 ‘이전’을 눌러 주세요." : "";
+  }
+
+  // ---------- copy / share / save ----------
+  function copy(text, msg) {
+    function fallback() {
+      var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.top = "-1000px"; document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); toast(ok ? msg : "복사가 막혀 있습니다. ‘요청문 미리 보기’를 열어 글자를 길게 눌러 복사해 주세요");
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { toast(msg); }, fallback);
+    else fallback();
+  }
+  $("#copyPrompt").onclick = function () { copy(prompt(), "복사했어요. 이제 AI 입력창에 붙여 넣으세요"); };
+  $("#copyAll").onclick = function () { copy(bundle(), "기획 한 장·요청문·문구를 모두 복사했습니다"); };
+  $("#share").onclick = function () {
+    if (navigator.share) navigator.share({ title: "우리 매장 홍보 기획 한 장", text: bundle() }).catch(function () {});
+    else copy(bundle(), "공유 창을 열 수 없어 전체를 복사했습니다. 메모나 카톡에 붙여 넣으세요");
+  };
+  $("#download").onclick = function () {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["﻿" + bundle()], { type: "text/plain;charset=utf-8" }));
+    a.download = "홍보기획한장.txt"; document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  };
+  $("#reset").onclick = function () {
+    if (!confirm("입력한 내용을 모두 지울까요? 되돌릴 수 없습니다.")) return;
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    location.reload();
+  };
+
+  // ---------- steps ----------
+  function go(n) {
+    S.step = n; store();
+    $$(".pane").forEach(function (p, i) { p.classList.toggle("on", i + 1 === n); });
+    $$(".steps button").forEach(function (b, i) { b.classList.toggle("on", i + 1 === n); b.classList.toggle("done", i + 1 < n); });
+    if (n === 2) showPrompt();
+    $("#prev").hidden = n === 1;
+    $("#next").hidden = n === 3;
+    $("#next").textContent = n === 1 ? "요청문 만들기" : "다음 · 문구 붙여 넣고 저장";
+    window.scrollTo(0, 0);
+  }
+  $$(".steps button").forEach(function (b) { b.onclick = function () { go(+b.dataset.go); }; });
+  $("#next").onclick = function () { go(S.step + 1); };
+  $("#prev").onclick = function () { go(S.step - 1); };
+
+  load(); paint(); go(S.step || 1);
+  window.__plan = { prompt: prompt, bundle: bundle, S: S };   // for testing in the browser console
+})();
+</script>
+</body>
+</html>
