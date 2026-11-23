@@ -102,11 +102,10 @@ textarea { min-height:68px; }
 <header class="top"><div class="in">
   <span class="badge">함께하는재단 굿윌스토어 · 홍보 기획 실습</span>
   <h1>우리 매장 홍보 기획 한 장</h1>
-  <p>일곱 가지 질문에 답하면, AI에 붙여 넣을 요청문이 만들어집니다. AI가 모자란 부분은 먼저 물어봐요.</p>
+  <p>일곱 가지 질문에 답하면, AI에 붙여 넣을 요청문이 만들어져요.</p>
 </div></header>
 <div class="inapp" id="inapp" hidden><div class="in">
-  <b>카카오톡 안에서 열렸어요.</b> 이대로는 AI 앱에 다녀오기가 불편하고, AI 로그인이 막힐 수 있어요.
-  <b>휴대폰 기본 브라우저(크롬·삼성 인터넷·사파리)</b>로 열어 주세요.
+  <b>카카오톡 안에서 열렸어요.</b> AI에 다녀오기 편하게 <b>다른 브라우저</b>로 열어 주세요.
   <button type="button" class="btn" id="openOut">다른 브라우저로 열기</button>
   <span id="openOutHelp" hidden>버튼이 안 되면 화면 오른쪽 위(또는 아래) <b>⋮ / 공유 버튼 → ‘다른 브라우저로 열기’</b>를 눌러 주세요.</span>
 </div></div>
@@ -120,8 +119,7 @@ textarea { min-height:68px; }
 <main class="wrap">
 <!-- ===== STEP 1 ===== -->
 <section class="pane on" id="p1">
-  <p class="note">보기에서 <b>고르거나</b>, <b>기타</b>를 눌러 <b>직접 적으면</b> 됩니다. 둘 다 해도 괜찮아요.<br>
-    꼭 채울 칸은 <b>1·3·4번</b>뿐이고, 나머지는 비워 둬도 됩니다. 비워 두면 AI가 먼저 물어봐요.</p>
+  <p class="note"><b>고르거나</b>, ✏️<b>기타</b>에 직접 적으면 돼요. 꼭 채울 칸은 <b>1·3·4번</b>뿐이에요.</p>
 
   <details class="demo">
     <summary>강사 시연용 · 가상 사례 불러오기</summary>
@@ -135,7 +133,7 @@ textarea { min-height:68px; }
 
   <div class="q req pick" id="q1">
     <div class="hd"><span class="n">1</span><h2><small>목표</small>어떤 고객의 선택을 돕고 싶은가요?</h2></div>
-    <p class="help">이번 홍보 한 건에서는 하나만 골라 주세요.</p>
+    <p class="help">하나만 골라 주세요.</p>
     <div class="chips goal" data-single="goal">
       <button type="button" class="chip" data-v="방문">방문을 돕기<small>‘한번 들러볼까’ 하도록</small></button>
       <button type="button" class="chip" data-v="구매">구매를 돕기<small>매장 안에서 고르기 쉽도록</small></button>
@@ -145,8 +143,7 @@ textarea { min-height:68px; }
 
   <div class="q opt" id="q2">
     <div class="hd"><span class="n">2</span><h2><small>고객</small>누구에게 전할까요?</h2></div>
-    <p class="help">하나를 고르거나, 기타를 눌러 직접 적어 주세요.</p>
-    <div class="chips" data-single="customerPick">
+        <div class="chips" data-single="customerPick">
       <button type="button" class="chip" data-v="매장 근처를 지나는 동네 주민">매장 근처를 지나는 동네 주민</button>
       <button type="button" class="chip" data-v="처음 와 보는 고객">처음 와 보는 고객</button>
       <button type="button" class="chip" data-v="매장에 들어와 둘러보는 고객">매장에 들어와 둘러보는 고객</button>
@@ -160,7 +157,7 @@ textarea { min-height:68px; }
 
   <div class="q req" id="q3">
     <div class="hd"><span class="n">3</span><h2><small>사실·장면</small>현장에서 직접 보거나 들은 것은 무엇인가요?</h2></div>
-    <p class="help">한두 줄이면 충분해요. 홍보할 상품이 들어가면 좋습니다.</p>
+    <p class="help">한두 줄이면 충분해요.</p>
     <textarea id="fact" rows="2" maxlength="300" placeholder="예: 니트·가디건을 색상별로 다시 진열했다"></textarea>
     <div class="lbl">이건 어떤 내용인가요? (하나 고르기)</div>
     <div class="seg" data-seg="factKind" role="group" aria-label="사실의 종류">
@@ -172,22 +169,21 @@ textarea { min-height:68px; }
 
   <div class="q req" id="q4">
     <div class="hd"><span class="n">4</span><h2><small>가치(짐작)</small>이 고객에게 어떤 점이 좋을 것 같나요?</h2></div>
-    <p class="help">아직 확인 전인 생각이어도 괜찮아요. 끝을 <b>‘~일 수 있다’</b>로 적어 보세요.</p>
+    <p class="help">끝을 <b>‘~일 수 있다’</b>로 적어 보세요.</p>
     <textarea id="value" rows="2" maxlength="300" placeholder="예: 원하는 색을 빨리 찾을 수 있다는 점이 들러볼 이유가 될 수 있다"></textarea>
-    <div class="lbl">생각이 안 날 때 눌러 보세요 (안 눌러도 됩니다)</div>
+    <div class="lbl">막히면 눌러 보세요 (예시 문장이 들어가요)</div>
     <div class="chips" data-hint="value">
       <button type="button" class="chip" data-v="빨리 찾을 수 있어 편할 수 있다">편리함</button>
       <button type="button" class="chip" data-v="부담 없는 가격에 괜찮은 물건을 살 수 있을 수 있다">이득</button>
       <button type="button" class="chip" data-v="필요한 물건을 사면서 이웃의 일자리에도 보탬이 될 수 있다">의미</button>
       <button type="button" class="chip" data-v="올 때마다 새로 구경할 것이 있어 즐거울 수 있다">발견하는 재미</button>
     </div>
-    <p class="tip">누르면 예시 문장이 칸에 들어갑니다. 우리 매장에 맞게 고쳐 주세요.</p>
     <p class="tip warn" id="valueTip" hidden>‘~이다’로 단정하기보다 ‘~일 수 있다’로 적으면, AI도 짐작을 사실처럼 쓰지 않아요.</p>
   </div>
 
   <div class="q opt" id="q5">
     <div class="hd"><span class="n">5</span><h2><small>근거</small>손님에게 무엇을 보여 줄까요?</h2></div>
-    <p class="help">손님이 ‘정말 그렇네’ 하고 눈으로 확인할 것이에요. 여러 개 골라도 되고, 기타에 직접 적어도 됩니다.</p>
+    <p class="help">여러 개 골라도 돼요.</p>
     <div class="chips" data-multi="evidence">
       <button type="button" class="chip" data-v="매장·진열 사진">매장·진열 사진</button>
       <button type="button" class="chip" data-v="상품 사진">상품 사진</button>
@@ -201,7 +197,7 @@ textarea { min-height:68px; }
 
   <div class="q opt" id="q6">
     <div class="hd"><span class="n">6</span><h2><small>채널</small>어디에 붙이거나 올릴까요?</h2></div>
-    <p class="help">여러 개 골라도 되고, 기타에 직접 적어도 됩니다.</p>
+    <p class="help">여러 개 골라도 돼요.</p>
     <div class="chips" data-multi="channel">
       <button type="button" class="chip" data-v="매장 앞 입간판">매장 앞 입간판</button>
       <button type="button" class="chip" data-v="매장 안 안내 카드">매장 안 안내 카드</button>
@@ -216,7 +212,7 @@ textarea { min-height:68px; }
 
   <div class="q opt" id="q7">
     <div class="hd"><span class="n">7</span><h2><small>반응</small>실행한 뒤 무엇을 살펴볼까요?</h2></div>
-    <p class="help">미리 정해 두면, 다음에 무엇을 바꿀지 알 수 있어요. 여러 개 골라도 되고, 기타에 직접 적어도 됩니다.</p>
+    <p class="help">여러 개 골라도 돼요.</p>
     <div class="chips" data-multi="reaction">
       <button type="button" class="chip" data-v="관련 문의">관련 문의</button>
       <button type="button" class="chip" data-v="코너 앞에 머무는 고객">코너 앞에 머무는 고객</button>
@@ -232,24 +228,24 @@ textarea { min-height:68px; }
 
 <!-- ===== STEP 2 ===== -->
 <section class="pane" id="p2">
-  <p class="saved">✓ 적은 내용은 이 휴대폰에 자동으로 저장돼요. 뒤로 가거나 창을 닫았다가 다시 열어도 그대로예요.</p>
+  <p class="saved">✓ 적은 내용은 자동 저장돼요.</p>
   <div class="miss" id="missing" hidden></div>
   <ol class="do">
-    <li><b>요청문 복사</b>를 누릅니다.
+    <li><b>요청문 복사</b> 누르기
       <button type="button" class="btn" id="copyPrompt" style="width:100%;margin-top:8px">요청문 복사</button></li>
-    <li>평소 쓰는 AI를 열고, 입력창을 길게 눌러 <b>붙여넣기</b> → 보내기
+    <li>AI를 열고 입력창을 길게 눌러 <b>붙여넣기</b> → 보내기
       <div class="ai">
         <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
         <a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
         <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
       </div></li>
-    <li>AI가 <b>질문</b>하면 짧게 답합니다. 모르면 “모르겠어”라고 해도 괜찮아요.</li>
-    <li>문구가 두 개 나오면, 마음에 드는 상자 오른쪽 위의 <b>복사</b>를 누릅니다.</li>
-    <li>여기로 돌아와 아래 <b>다음</b>을 눌러 붙여 넣습니다.<br>
-      <span class="tip">돌아오는 법: 휴대폰의 <b>최근 앱</b> 버튼(화면 아래 ‖‖‖ 또는 □, 아이폰은 아래에서 위로 쓸어 올리기)을 누르고 이 브라우저 창을 고르세요.</span></li>
+    <li>AI가 <b>질문</b>하면 짧게 답하기 (“모르겠어”도 괜찮아요)</li>
+    <li>문구 두 개 중 마음에 드는 상자의 <b>복사</b> 누르기</li>
+    <li>여기로 돌아와 <b>다음</b> 누르기<br>
+      <span class="tip">같은 창이면 <b>뒤로가기</b>, AI 앱이 따로 열렸으면 <b>최근 앱</b> 버튼으로 돌아와요. 적은 내용은 그대로예요.</span></li>
   </ol>
   <details class="demo"><summary>요청문 미리 보기</summary><div class="out"><pre id="prompt"></pre></div></details>
-  <p class="tip">AI 접속이 어려워도 괜찮습니다. 다음 단계에서 기획 한 장과 요청문만 저장해 두면 나중에 다시 쓸 수 있어요.</p>
+  <p class="tip">AI가 안 열려도 괜찮아요. 다음 단계에서 저장만 해 두세요.</p>
 </section>
 
 <!-- ===== STEP 3 ===== -->
@@ -267,13 +263,13 @@ textarea { min-height:68px; }
       <label class="check"><input type="checkbox">우리 손님에게 어울리는 말투인가요?</label>
     </div>
   </div>
-  <div class="lbl">오늘 결과물 저장 (기획 한 장 · 요청문 · 문구)</div>
+  <div class="lbl">오늘 결과물 저장 (문구 · 요청문)</div>
   <div class="acts">
     <button type="button" class="btn navy" id="share">나에게 보내기</button>
     <button type="button" class="btn" id="copyAll">전체 복사</button>
     <button type="button" class="btn ghost" id="download" style="flex:1 1 100%">텍스트 파일로 저장</button>
   </div>
-  <p class="tip">‘나에게 보내기’를 누르면 공유 창이 열립니다. 카카오톡 ‘나와의 채팅’이나 메모 앱을 고르면 돼요. 공유 창이 안 열리면 ‘전체 복사’ 후 붙여 넣어 주세요.</p>
+  <p class="tip">‘나에게 보내기’ → 카카오톡 ‘나와의 채팅’을 고르면 돼요.</p>
   <p class="privacy">입력한 내용은 이 휴대폰 브라우저에만 남고, 어디에도 전송되지 않습니다.<br>
     <button type="button" class="reset" id="reset">입력 내용 모두 지우기</button></p>
 </section>
@@ -289,6 +285,8 @@ textarea { min-height:68px; }
 (function () {
   "use strict";
   var KEY = "goodwill-plan-v2";
+  var ua = navigator.userAgent || "";
+  var kakao = /KAKAOTALK/i.test(ua);
   var GOAL = {
     "방문": "지나가는 고객이 ‘한번 들러볼까’ 하도록 방문을 돕기",
     "구매": "매장에 들어온 고객이 고르기 쉽도록 구매를 돕기",
@@ -429,11 +427,11 @@ textarea { min-height:68px; }
   }
   function bundle() {
     var d = new Date(), day = d.getFullYear() + "." + (d.getMonth() + 1) + "." + d.getDate();
-    return ["■ 우리 매장 홍보 기획 한 장 (" + day + ")"].concat(planLines(), [
-      "", "■ AI 요청문 (다음에는 [기획 한 장] 내용만 바꿔 쓰기)", prompt(),
-      "", "■ 고르고 고친 문구", clean(S.draft) ? S.draft.trim() : "(아직 없음)",
-      "", "■ 실행 기록 (나중에 채우기)", "· 게시한 날짜: ", "· 살펴본 반응: ", "· 다음에 바꿔 볼 것: "
-    ]).join("\n");
+    return [
+      "■ 고른 문구 (" + day + ")", clean(S.draft) ? S.draft.trim() : "(아직 없음)",
+      "", "■ 다음에 다시 쓸 요청문 ([기획 한 장]만 바꿔서 AI에 붙여 넣기)", prompt(),
+      "", "■ 실행 기록", "· 게시한 날: ", "· 살펴본 반응: ", "· 다음에 바꿔 볼 것: "
+    ].join("\n");
   }
   function esc(s) { return s.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
   function showPrompt() {
@@ -444,7 +442,7 @@ textarea { min-height:68px; }
     if (!clean(S.value)) miss.push("4 가치");
     var m = $("#missing");
     m.hidden = !miss.length;
-    m.textContent = miss.length ? "아직 비어 있는 칸: " + miss.join(", ") + ". 그대로 복사해도 AI가 먼저 물어봐요. 미리 채우려면 ‘이전’을 눌러 주세요." : "";
+    m.textContent = miss.length ? "아직 비어 있는 칸: " + miss.join(", ") + ". 그대로 복사해도 AI가 물어봐요." : "";
   }
 
   // ---------- copy / share / save ----------
@@ -459,10 +457,10 @@ textarea { min-height:68px; }
     else fallback();
   }
   $("#copyPrompt").onclick = function () { copy(prompt(), "복사했어요. 이제 AI 입력창에 붙여 넣으세요"); };
-  $("#copyAll").onclick = function () { copy(bundle(), "기획 한 장·요청문·문구를 모두 복사했습니다"); };
+  $("#copyAll").onclick = function () { copy(bundle(), "문구와 요청문을 복사했어요"); };
   $("#share").onclick = function () {
     if (navigator.share) navigator.share({ title: "우리 매장 홍보 기획 한 장", text: bundle() }).catch(function () {});
-    else copy(bundle(), "공유 창을 열 수 없어 전체를 복사했습니다. 메모나 카톡에 붙여 넣으세요");
+    else copy(bundle(), kakao ? "카카오톡 안에서는 공유 창이 안 열려서 대신 복사해 뒀어요. ‘나와의 채팅’에 붙여 넣으세요" : "이 브라우저는 공유 창이 안 열려서 대신 복사해 뒀어요. 메모나 카톡에 붙여 넣으세요");
   };
   $("#download").onclick = function () {
     var a = document.createElement("a");
@@ -488,12 +486,14 @@ textarea { min-height:68px; }
     window.scrollTo(0, 0);
   }
   $$(".steps button").forEach(function (b) { b.onclick = function () { go(+b.dataset.go); }; });
-  $("#next").onclick = function () { go(S.step + 1); };
+  $("#next").onclick = function () {
+    if (S.step === 1 && !(S.goal && clean(S.fact) && clean(S.value)) &&
+        !confirm("1·3·4번이 비어 있어요.\nAI에게 답한 내용은 여기 저장되지 않아요.\n그래도 넘어갈까요?")) return;
+    go(S.step + 1);
+  };
   $("#prev").onclick = function () { go(S.step - 1); };
 
   // ---------- in-app browser (카카오톡 등) ----------
-  var ua = navigator.userAgent || "";
-  var kakao = /KAKAOTALK/i.test(ua);
   if (kakao || /NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua)) {
     $("#inapp").hidden = false;
     $("#openOut").onclick = function () {
